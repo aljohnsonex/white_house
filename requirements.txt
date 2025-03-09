@@ -1,4 +1,6 @@
-pandas
-numpy
-PIL
-pandas_gbq
+pandas-gbq==0.28.0
+google-cloud-bigquery==3.25.0
+pandas==2.2.2
+streamlit==1.43.1
+numpy==1.26.4
+Pillow==10.3.0  # For PIL

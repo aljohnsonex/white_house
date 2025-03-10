@@ -6,7 +6,7 @@ import pandas_gbq as pgbq
 from google.oauth2 import service_account
 from google.cloud import bigquery
 
-st.write(st.secrets)  # ***CRITICAL DEBUGGING STEP***
+# st.write(st.secrets)  # ***CRITICAL DEBUGGING STEP***
 
 try:
     # Initialize BigQuery client

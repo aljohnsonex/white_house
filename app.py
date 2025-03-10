@@ -4,13 +4,27 @@ import numpy as np
 from PIL import Image
 import pandas_gbq as pgbq
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from google.cloud import bigquery
 
+def get_credentials():
+    """Create and refresh OAuth credentials"""
+    creds = Credentials(
+        token=None,  # Will be auto-populated on refresh
+        refresh_token=st.secrets["gcp_oauth"]["refresh_token"],
+        client_id=st.secrets["gcp_oauth"]["client_id"],
+        client_secret=st.secrets["gcp_oauth"]["client_secret"],
+        token_uri=st.secrets["gcp_oauth"]["token_uri"],
+        scopes=st.secrets["gcp_oauth"]["scopes"].split(",")
+    )
+    
+    if creds.expired:
+        creds.refresh(Request())
+        
+    return creds
 
-credentials = Credentials(
-    client_id=st.secrets["gcp_credentials"]["client_id"],
-    client_secret=st.secrets["gcp_credentials"]["client_secret"],
-    scopes=st.secrets["gcp_credentials"]["scopes"]
-)
+# Initialize BigQuery client
+client = bigquery.Client(credentials=get_credentials())
 
 custom_css = """
 <style>

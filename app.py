@@ -21,7 +21,7 @@ def get_credentials():
     if creds.expired:
         creds.refresh(Request())
         
-    return creds
+    return creds, st.secrets["gcp_oauth"]["project_id"]
 
 # Initialize BigQuery client
 client = bigquery.Client(

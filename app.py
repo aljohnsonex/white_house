@@ -148,7 +148,7 @@ try:
                 
             formatted_schedule.append("</div></details>\n")
     
-    return "\n".join(formatted_schedule)
+        return "\n".join(formatted_schedule)
 
     image = Image.open('./capitol.png')
 

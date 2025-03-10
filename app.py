@@ -24,8 +24,10 @@ def get_credentials():
     return creds
 
 # Initialize BigQuery client
-client = bigquery.Client(credentials=get_credentials())
-
+client = bigquery.Client(
+    project="aljohnsonex",  # Your actual project ID
+    credentials=get_credentials()
+)
 custom_css = """
 <style>
 p {

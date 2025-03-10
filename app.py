@@ -5,6 +5,7 @@ from PIL import Image
 import pandas_gbq as pgbq
 from google.oauth2 import service_account
 from google.cloud import bigquery
+import base64
 
 # st.write(st.secrets) 
 
@@ -114,47 +115,68 @@ try:
 
     image = Image.open('./capitol.png')
 
-    header1, header2 = st.columns([1, 3])
-
-    with header1: 
-        st.image(image, width = 75)
-
-        hide_img_fs = '''
+    with open('./capitol.png', "rb") as img_file:
+        encoded_image = base64.b64encode(img_file.read()).decode()
+    
+    # Center the image using HTML and CSS
+    st.markdown(
+        f"""
         <style>
-        .stImage {
-            margin-top: 30px;  /* Adjust this value to move the image down */
-            margin-left: 70px;  /* Adjust this value to move the image right */
-        }
-        button[title="View fullscreen"] {
-            visibility: hidden;
-        }
-        button[title="View fullscreen"]{
-            visibility: hidden;}
+        .centered-image {{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 30px; /* Adjust this value to move the image down */
+            width: 75px; /* Set the width of the image */
+        }}
         </style>
-        '''
-
-        st.markdown(hide_img_fs, unsafe_allow_html=True)
-
-    with header2:
-        st.markdown("""
+        <img class="centered-image" src="data:image/png;base64,{encoded_image}" alt="Capitol Image">
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    
+    # Title and subtext styling
+    st.markdown(
+        """
         <style>
-        .stMarkdown {
-            margin-bottom: 0.1rem !important; /* Reduce bottom margin */
+        .custom-subtext {
+            text-align: center; /* Center the text */
+            font-style: italic; /* Italicize the text */
+            font-size: 14px; /* Adjust font size if needed */
+            margin-top: -20px; /* Adjust spacing above (decrease margin) */
+            margin-bottom: 0px; /* Adjust spacing below (decrease margin) */
         }
-        h2 {
-            margin-bottom: 0rem !important; /* Reduce bottom margin */            
+        a.custom-link {
+            color: #1a73e8; /* Google blue color for links */
+            text-decoration: none; /* Remove underline from links */
+        }
+        a.custom-link:hover {
+            text-decoration: underline; /* Add underline on hover */
         }
         hr {
-            margin-top: 0.3rem !important; /* Reduce top margin of divider */
-            margin-bottom: 0.1rem !important; /* Reduce bottom margin of divider */
+            margin-top: 0px; /* Adjust top margin of divider (decrease) */
+            margin-bottom: 0px; /* Adjust bottom margin of divider (decrease) */
         }
         </style>
-        """, unsafe_allow_html=True)
-
-        st.markdown("""<h2>White House Tracker</h2>""", unsafe_allow_html=True)
-
-        st.markdown("*All data collected from www.rollcall.com and www.whitehouse.gov*")
-
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    # Title (centered)
+    st.markdown("<h2 style='text-align: center; margin-left: 20px'>White House Tracker</h2>", unsafe_allow_html=True)
+    
+    # Subtext (centered and italicized with scoped styles)
+    st.markdown(
+        """<p class="custom-subtext">
+        All data collected from 
+        <a class="custom-link" href="https://www.rollcall.com" target="_blank">Roll Call</a> 
+        and 
+        <a class="custom-link" href="https://www.whitehouse.gov" target="_blank">White House</a>
+        </p>""",
+        unsafe_allow_html=True,
+    )
+    
     st.divider()
 
     col1, col2 = st.columns([1, 1.5])

@@ -3,35 +3,17 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import pandas_gbq as pgbq
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from google.cloud import bigquery
 
-def get_credentials():
-    """Create and refresh OAuth credentials"""
-    creds = Credentials(
-        token=None,  # Will be auto-populated on refresh
-        refresh_token=st.secrets["gcp_oauth"]["refresh_token"],
-        client_id=st.secrets["gcp_oauth"]["client_id"],
-        client_secret=st.secrets["gcp_oauth"]["client_secret"],
-        token_uri=st.secrets["gcp_oauth"]["token_uri"],
-        scopes=st.secrets["gcp_oauth"]["scopes"].split(",")
-    )
-    
-    if creds.expired:
-        creds.refresh(Request())
-        
-    return creds, st.secrets["gcp_oauth"]["project_id"]
-
 # Initialize BigQuery client
-try:
-    credentials, project_id = get_credentials()
-    client = bigquery.Client(project=project_id, credentials=credentials)
-except Exception as e:
-    st.error(f"Failed to initialize BigQuery client: {str(e)}")
-    st.error(f"Project ID: {project_id}")
-    st.error(f"Credentials: {credentials}")
-    raise
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(
+    project=credentials.project_id,
+    credentials=credentials
+)
 
 custom_css = """
 <style>

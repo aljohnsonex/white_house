@@ -3,6 +3,14 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import pandas_gbq as pgbq
+from google.oauth2.credentials import Credentials
+
+
+credentials = Credentials(
+    client_id=st.secrets["gcp_credentials"]["client_id"],
+    client_secret=st.secrets["gcp_credentials"]["client_secret"],
+    scopes=st.secrets["gcp_credentials"]["scopes"]
+)
 
 custom_css = """
 <style>

@@ -98,8 +98,8 @@ try:
 
     def format_calendar_with_expanders(df):
         unique_dates = df['formatted_date'].unique()
-        for date in unique_dates:
-            with st.expander(date):
+        for index, date in enumerate(unique_dates):
+            with st.expander(date, expanded=(index == 0)):  # Open first expander by default
                 group = df[df['formatted_date'] == date]
                 group = group.sort_values('time', ascending=True)
     
@@ -180,7 +180,6 @@ try:
         }
         </style>
         <h3>Trump Calendar</h3>
-        <div class="vertical-line"></div>
         """, unsafe_allow_html=True)
 
         format_calendar_with_expanders(calendar_today)

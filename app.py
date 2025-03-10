@@ -24,10 +24,9 @@ def get_credentials():
     return creds, st.secrets["gcp_oauth"]["project_id"]
 
 # Initialize BigQuery client
-client = bigquery.Client(
-    project="aljohnsonex",  # Your actual project ID
-    credentials=get_credentials()
-)
+credentials, project_id = get_credentials()
+client = bigquery.Client(project=project_id, credentials=credentials)
+
 custom_css = """
 <style>
 p {

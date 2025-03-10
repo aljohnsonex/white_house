@@ -97,37 +97,58 @@ try:
 
 
     def format_calendar(df):
-        formatted_schedule = []
+        css = """
+        <style>
+        summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        summary svg {
+            margin-right: 1px;
+            transition: transform 0.2s ease-in-out;
+            transform: rotate(0deg);
+        }
+        details:not([open]) > summary svg {
+            transform: rotate(-90deg);
+        }
+        </style>
+        """
     
+        formatted_schedule = [css]
+        
+        # Get unique dates in their original order
         unique_dates = df['formatted_date'].unique()
-    
+        
         for date in unique_dates:
             group = df[df['formatted_date'] == date]
             formatted_schedule.append(f"""
-            <details>
-                <summary>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path d="M7 10l5 5 5-5z"/>
-                    </svg>
-                    <h5 style="margin: 0; display: inline;">{date}</h5>
-                </summary>
-                <div>
-            """)
+    <details open>
+        <summary>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M7 10l5 5 5-5z"/>
+            </svg>
+            <h5 style="margin: 0; display: inline;">{date}</h5>
+        </summary>
+        <div style="margin-left: 20px;">
+    """)
+            # Sort group by time before processing
             group = group.sort_values('time', ascending=True)
-    
+            
             for _, row in group.iterrows():
                 time_part = f"{row['time_formatted']}: " if row['time_formatted'] else ""
-                formatted_schedule.append(f"<p>{time_part}{row['details']}</p>")
-    
+                formatted_schedule.append(f"{time_part}{row['details']}")
+                
                 if pd.notna(row['url']):
-                    formatted_schedule.append(f"  <a href='{row['url']}' target='_blank'>Transcript</a>")  # Make link clickable
+                    formatted_schedule.append(f"  - [Transcript]({row['url']})")
                 if pd.notna(row['video_url']):
-                    formatted_schedule.append(f"  <a href='{row['video_url']}' target='_blank'>Video</a>")  # Make link clickable
-                formatted_schedule.append("<br>")
-    
+                    formatted_schedule.append(f"  - [Video]({row['video_url']})")
+                formatted_schedule.append("\n")
+                
             formatted_schedule.append("</div></details>\n")
-
-        return "\n".join(formatted_schedule)
+    
+    return "\n".join(formatted_schedule)
 
     image = Image.open('./capitol.png')
 

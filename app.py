@@ -8,7 +8,7 @@ from google.cloud import bigquery
 
 # Initialize BigQuery client
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_oauth"]
+    st.secrets["gcp"]
 )
 client = bigquery.Client(
     project=credentials.project_id,

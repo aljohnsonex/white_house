@@ -24,8 +24,14 @@ def get_credentials():
     return creds, st.secrets["gcp_oauth"]["project_id"]
 
 # Initialize BigQuery client
-credentials, project_id = get_credentials()
-client = bigquery.Client(project=project_id, credentials=credentials)
+try:
+    credentials, project_id = get_credentials()
+    client = bigquery.Client(project=project_id, credentials=credentials)
+except Exception as e:
+    st.error(f"Failed to initialize BigQuery client: {str(e)}")
+    st.error(f"Project ID: {project_id}")
+    st.error(f"Credentials: {credentials}")
+    raise
 
 custom_css = """
 <style>

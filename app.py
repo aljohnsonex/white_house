@@ -32,6 +32,7 @@ try:
     p {
         line-height: 1.75; /* Adjust this value to control the spacing */
         margin-bottom: 0.5rem; /* Optional: Reduce bottom margin for tighter spacing */
+        font-size: 12px;
     }
 
     ul {
@@ -45,6 +46,14 @@ try:
 
     details {
         margin-bottom: 20px; /* Adjust this value as needed */
+    }
+
+    div[data-testid="stExpander"] details summary p {
+    font-size: 1rem;  # Adjust this value to change the size
+    }
+    div[data-testid="stExpander"] div[role="group"] p {
+    font-size: 2rem; /* Adjust this value to change the text size */
+    line-height: 1.5; /* Optional: Adjust line spacing */
     }
     </style>
     """
@@ -114,7 +123,7 @@ try:
     
                 for _, row in group.iterrows():
                     time_part = f"{row['time_formatted']}: " if row['time_formatted'] else ""
-                    st.markdown(f"<p>{time_part}{row['details']}</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style = 'font-size: 14px;'><strong>{time_part}</strong>{row['details']}</p>", unsafe_allow_html=True)
     
                     if pd.notna(row['url']):
                         st.markdown(f"<a href='{row['url']}' target='_blank'>Transcript</a>", unsafe_allow_html=True)
@@ -134,7 +143,7 @@ try:
             display: block;
             margin-left: auto;
             margin-right: auto;
-            margin-top: 30px; /* Adjust this value to move the image down */
+            margin-top: -20px; /* Adjust this value to move the image down */
             width: 75px; /* Set the width of the image */
         }}
         </style>
@@ -152,8 +161,8 @@ try:
             text-align: center; /* Center the text */
             font-style: italic; /* Italicize the text */
             font-size: 14px; /* Adjust font size if needed */
-            margin-top: -20px; /* Adjust spacing above (decrease margin) */
-            margin-bottom: 0px; /* Adjust spacing below (decrease margin) */
+            margin-top: 0px; /* Adjust spacing above (decrease margin) */
+            margin-bottom: 25px; /* Adjust spacing below (decrease margin) */
         }
         a.custom-link {
             color: #1a73e8; /* Google blue color for links */
@@ -163,7 +172,7 @@ try:
             text-decoration: underline; /* Add underline on hover */
         }
         hr {
-            margin-top: 0px; /* Adjust top margin of divider (decrease) */
+            margin-top: 20px; /* Adjust top margin of divider (decrease) */
             margin-bottom: 0px; /* Adjust bottom margin of divider (decrease) */
         }
         </style>
@@ -172,7 +181,7 @@ try:
     )
     
     # Title (centered)
-    st.markdown("<h2 style='text-align: center; margin-left: 20px'>White House Tracker</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; margin-left: 25px; margin-top: -15px;'>White House Tracker</h2>", unsafe_allow_html=True)
     
     # Subtext (centered and italicized with scoped styles)
     st.markdown(
@@ -193,9 +202,11 @@ try:
         st.markdown("""
         <style>
         h3 {
-            margin-top: 1rem !important; /* Adjust this value to move the header down */
-            margin-bottom: -1rem !important; /* Optional: Adjust bottom margin */
-            margin-left: 20px !important; /* Keep alignment consistent with Recent Events */
+            margin-top: 1.3rem !important;
+            margin-bottom: -1rem !important;
+            margin-left: 15px !important;
+            font-size: 1.5rem !important; /* Match the size of the expander header */
+            font-weight: 600 !important; /* Match the weight of the expander header */
         }
         .stMarkdown {
             margin-top: 0;
@@ -211,45 +222,49 @@ try:
         </style>
         <h3>Trump Calendar</h3>
         """, unsafe_allow_html=True)
-
         format_calendar_with_expanders(calendar_today)
 
     with col2:
         st.markdown("""
         <style>
-        h4 {
-            margin-left: 20px !important;  # Match left margin with Trump Calendar
-            margin-top: -1rem !important;  # Match top margin with Trump Calendar
-            margin-bottom: 1rem !important;  # Match bottom margin with Trump Calendar
+        h5 {
+            margin-top: 1rem !important;
+            margin-bottom: 0rem !important;  # Reduced from 1rem to 0.5rem
+            font-size: 1.5rem;
         }
         .stExpander {
             border: none !important;
             box-shadow: none !important;
-            margin-left: 20px;  # Adjust left margin of expanders
+            margin-left: 20px;
         }
         .streamlit-expanderHeader {
-            font-size: 1em !important;  # Adjusted from 5em to 1.2em for better sizing
+            font-size: 1em !important;
             font-weight: bold !important;
         }
         .custom-expander .streamlit-expanderHeader {
-        font-size: 5em !important;
-        font-weight: bold !important;
-        color: #4A4A4A;  /* Adjust color as needed */
+            font-size: 5em !important;
+            font-weight: bold !important;
+            color: #4A4A4A;
         }
         .date-paragraph {
             margin-left: 0px !important;
             text-align: left;
-            margin-bottom: 0.3rem;
+            font-size: 14px;
         }
         .transcript-paragraph {
             margin-left: 20px !important;
             text-align: left;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;  # Reduced from 0.3rem to 0.2rem
+            font-size: 14px !important;
+        }
+        hr {
+            margin-top: 0.5rem !important;  # Added to reduce space above divider
+            margin-bottom: 0.5rem !important;  # Added to reduce space below divider
         }
         </style>
         """, unsafe_allow_html=True)
 
-        st.markdown("<h4>Recent Events</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style = 'margin-left: 15px;margin-bottom: 0.1rem;'>Recent Events</h4>", unsafe_allow_html=True)
         
         sorted_weeks = weekly.sort_values(by='week', ascending=False)
         
@@ -259,7 +274,7 @@ try:
             
             # Use expanded=True for the first expander
             with st.expander(f"Week of {week_date.strftime('%B %-d, %Y')}", expanded=(i == 0)):
-                st.markdown(f"<p><strong>tldr; </strong> {week_data['summary']}</p> ", unsafe_allow_html=True)
+                st.markdown(f"<p style = 'font-size: 14px;'><strong>tldr; </strong> {week_data['summary']}</p> ", unsafe_allow_html=True)
                 
                 st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -285,11 +300,12 @@ try:
                             parts = bullet.split(': ', 1)
                             if len(parts) == 2:
                                 topic, description = parts
-                                st.markdown(f"<p class='transcript-paragraph'><u>{topic.strip()}</u>: {description.strip()}</p>", unsafe_allow_html=True)
+                                st.markdown(f"<p style = 'font-size: 14px; margin-left: 20px'><u>{topic.strip()}</u>: {description.strip()}</p>", unsafe_allow_html=True)
                             else:
                                 st.markdown(f"<p class='transcript-paragraph'>{bullet.strip()}</p>", unsafe_allow_html=True)
-                    
+                                
                     st.markdown("<hr>", unsafe_allow_html=True)
+
 except Exception as e:
     st.error(f"An error occurred: {e}")
     st.stop()

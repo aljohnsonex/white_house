@@ -9,13 +9,14 @@ import base64
 
 # st.write(st.secrets) 
 
-# hide_github_icon = """
-# <style>
-# #MainMenu {visibility: hidden;}
-# footer {visibility: hidden;}
-# </style>
-# """
-# st.markdown(hide_github_icon, unsafe_allow_html=True)
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            .viewerBadge_container__1QSob {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 try:
     # Initialize BigQuery client

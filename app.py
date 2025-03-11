@@ -228,7 +228,7 @@ try:
         st.markdown("""
         <style>
         h5 {
-            margin-top: 1rem !important;
+            #margin-top: 1rem !important;
             margin-bottom: 0rem !important;  # Reduced from 1rem to 0.5rem
             font-size: 1.5rem;
         }

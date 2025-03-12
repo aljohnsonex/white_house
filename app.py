@@ -275,7 +275,7 @@ try:
             
             # Use expanded=True for the first expander
             with st.expander(f"Week of {week_date.strftime('%B %-d, %Y')}", expanded=(i == 0)):
-                st.markdown(f"<p style = 'font-size: 14px;'><strong>tldr; </strong> {week_data['summary']}</p> ", unsafe_allow_html=True)
+                st.markdown(f"<p style = 'font-size: 14px;'><strong>tl;dr - </strong> {week_data['summary']}</p> ", unsafe_allow_html=True)
                 
                 st.markdown("<hr>", unsafe_allow_html=True)
 
